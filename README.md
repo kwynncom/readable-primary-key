@@ -1,6 +1,34 @@
 # readable-primary-key
 Create human-readable primary keys for MongoDB
 
+My original idea is further below, but this may be coming to a dead end.  
+
+It takes roughly 1,200ns to run "new MongoDB\BSON\ObjectId();"  Or, more precisely, it takes that on average when you run it 1,000 times (see ooid.php).
+
+I created /oidmods to test how long it takes to make an OOID human-readable, where 
+
+5f73dd149dcaf543ad322721 becomes 
+2020-0929-2119-16-03286817-9dcaf543ad
+
+That's time down to seconds, a 24 bit sequence starting from a random number, and the process ID + machine ID UID.  
+See https://www.php.net/manual/en/class.mongodb-bson-objectid.php
+
+The answer is that it's something like 30X slower than the original object ID.  
+
+Running my extension is only something like 30% faster than ObjectId().  And for the slightly longer runtime, one gets a true UUID.  The sequence 
+gets me fractional seconds, after the fact, because I can calculate how many numbers in the sequence were created within a second.  
+
+The point being that ObjectId() is efficient and effective and can be turned into something human-readable after the fact.  
+
+Rather than considering a general use case, I'll start thinking about unique, human-readable keys on a collection by collection basis.
+
+To go back a few weeks, one point that started all this is that I realized that my "getSeq()" function in kwutils.php is by no means foolproof.  It 
+will fail under some circumances; there exists a race condition.  I have some reason to think that it does fail in production (on live systems) maybe 
+once a month or so.  I was using sequences as something human readable, but I need to re-think that, too.
+
+***
+Written Sep 27 (or whatever GitHub says), before the above:
+
 As of late September, 2020, this has already branched, although not "branched" in the version-control sense.  There was my original 
 intention, and then there is my research into UUIDs.  The UUID stuff has become far more interesting to me for now.
 
