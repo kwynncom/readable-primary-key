@@ -1,5 +1,0 @@
-WORKS:
-php -d extension=./modules/php_rdtscp.so test1.php
-
-
-https://stackoverflow.com/questions/3632160/how-to-make-a-php-extension
