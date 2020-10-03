@@ -9,8 +9,8 @@ function runAllCores() {
     unset($dao);
     
     $now = time();
-    $cn = 12;
-    $ni = 40000;
+    $cn = 1; // number of cpus
+    $ni = 1; // number of iterations
     if (0) $func = 'hrtime';
     else   $func = 'rdtscp';
     
@@ -38,6 +38,8 @@ function runAllCores() {
 		$dat['tuv'] = $a[$i];
 	    else {
 		$dat['tuv']  = $a[$i][0] . '-' . $a[$i][1];
+		$dat['_id'] = $dat['tuv']; 
+		// $dat['_id'] = $a[$i][0]; // YES, get duplicates with only 12 X 1000
 		$dat['tick'] = $a[$i][0];
 		$dat['cpun'] = $a[$i][1];
 	    }

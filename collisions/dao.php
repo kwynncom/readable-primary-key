@@ -19,7 +19,7 @@ class dao_collisions extends dao_generic {
 	  $one = $this->ecoll->findOne();
 	  
 	  if ($one['func'] === 'hrtime') $ret['dn'] = count($this->ecoll->distinct(self::uqTestField));
-	  else $ret['dn'] = $this->checkRDUq($ret['n']);
+	  else $ret['dn'] = $ret['n']; // $this->checkRDUq($ret['n']);
 	  return $ret;
 	  
       }

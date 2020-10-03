@@ -2,7 +2,7 @@
 
 require_once('dao.php');
 
-$cmd = 'php ' . ' -d extension=/tmp/phprd/modules/php_rdtscp.so ' . __DIR__  . '/' . 'run.php';
+$cmd = 'php ' . '-d extension=/tmp/phprd/modules/php_rdtscp.so ' . __DIR__  . '/' . 'run.php';
 echo $cmd . "\n";
 if (1) shell_exec($cmd);
 echo "Run complete.  Analyzing.... \n";
