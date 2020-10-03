@@ -9,8 +9,8 @@ function runAllCores() {
     unset($dao);
     
     $now = time();
-    $cn = 1; // number of cpus
-    $ni = 1; // number of iterations
+    $cn = 12; // number of cpus
+    $ni = 1000; // number of iterations
     if (0) $func = 'hrtime';
     else   $func = 'rdtscp';
     
@@ -22,12 +22,9 @@ function runAllCores() {
 
 	if ($pid !== 0) continue;
 	
-	$dao = new dao_collisions();
-
+	$dao = new dao_collisions(); // weird things happen if this isn't separate per process
 	
-	for ($i=0; $i <  $ni; $i++) {
-	    $a[] = $func(1);
-	}
+	for ($i=0; $i <  $ni; $i++) $a[] = $func(1);
 
 	for ($i=0; $i <  $ni; $i++) {
 	    $dat = [];
