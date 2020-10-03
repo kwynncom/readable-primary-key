@@ -1,1 +1,2 @@
+Then 12 X 80,000 = 960,000
 I've gotten up to 12 cores X 70,000 iterations = 840,000 calls with no collisions, using rdtscp.

@@ -49,7 +49,7 @@ class dao_collisions extends dao_generic {
 	  return $agg->toArray();
       }
       public function truncate() {
-	  $this->ecoll->deleteMany([]);
+	  $this->ecoll->drop([]);
       }
       
 }

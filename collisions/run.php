@@ -10,7 +10,7 @@ function runAllCores() {
     
     $now = time();
     $cn = 12; // number of cpus
-    $ni = 1000; // number of iterations
+    $ni = 90000; // number of iterations
     if (0) $func = 'hrtime';
     else   $func = 'rdtscp';
     
