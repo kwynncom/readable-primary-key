@@ -4,6 +4,8 @@ require_once('/opt/kwynn/kwutils.php');
 
 class dao_collisions extends dao_generic {
     const db = 'collisions';
+    const uqTestField = 'tuv';
+    
 	function __construct() {
 	    parent::__construct(self::db);
 	    $this->ecoll    = $this->client->selectCollection(self::db, 'entries');
@@ -13,17 +15,28 @@ class dao_collisions extends dao_generic {
       
       public function ndn() {
 	  $ret['n' ] = $this->ecoll->count();
-	  $ret['dn'] = count($this->ecoll->distinct('h'));
+	  
+	  $one = $this->ecoll->findOne();
+	  
+	  if ($one['func'] === 'hrtime') $ret['dn'] = count($this->ecoll->distinct(self::uqTestField));
+	  else $ret['dn'] = $this->checkRDUq($ret['n']);
 	  return $ret;
 	  
       }
       
+      private function checkRDUq($n) {
+	  $res = $this->ecoll->createIndex(['tick' => 1, 'cpun' => 1], ['unique' => true]);
+	  if ($res === 'tick_1_cpun_1') return $n;
+	  else return $n - 1;
+      }
+      
+      
       public function group() {
-	  $agg = $this->ecoll->aggregate(
+	$agg = $this->ecoll->aggregate(
 	    [
 		[ 
 		    '$group' => [
-			'_id' => '$h',
+			'_id' => '$' . self::uqTestField,
 			'tot' => ['$sum' => 1]
 		    ]
 		],
@@ -31,25 +44,12 @@ class dao_collisions extends dao_generic {
 		    '$match' => ['tot' => ['$gt' => 1]]
 		]
 	    ]
-		  );
+	);
 	  
 	  return $agg->toArray();
       }
+      public function truncate() {
+	  $this->ecoll->deleteMany([]);
+      }
+      
 }
-/*
-db.sales.aggregate(
-  [
-    // First Stage
-    {
-      $group :
-        {
-          _id : "$item",
-          totalSaleAmount: { $sum: { $multiply: [ "$price", "$quantity" ] } }
-        }
-     },
-     // Second Stage
-     {
-       $match: { "totalSaleAmount": { $gte: 100 } }
-     }
-   ]
- )*/
