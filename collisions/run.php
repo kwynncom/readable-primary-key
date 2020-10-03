@@ -9,8 +9,8 @@ function runAllCores() {
     unset($dao);
     
     $now = time();
-    $cn = 12; // number of cpus
-    $ni = 90000; // number of iterations
+    $cn = 1; // number of cpus
+    $ni = 1; // number of iterations
     if (0) $func = 'hrtime';
     else   $func = 'rdtscp';
     
