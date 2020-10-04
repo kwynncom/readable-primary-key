@@ -6,6 +6,6 @@ fi
 cp * $BDIR
 cd $BDIR
 phpize
-./configure --enable-php_rdtscp
+./configure --enable-rdtscp
 make
-php -d extension=$BDIR/modules/php_rdtscp.so $ODIR/test.php
+php -d extension=$BDIR/modules/rdtscp.so $ODIR/test.php

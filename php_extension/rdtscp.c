@@ -7,15 +7,15 @@
 #include <x86intrin.h>
 
 // *****
-zend_function_entry rdtscp_php_functions[] = {
+zend_function_entry rdtscp_functions[] = {
     PHP_FE(rdtscp, NULL)
     {NULL, NULL, NULL}
 };
 
-zend_module_entry rdtscp_php_module_entry = {
+zend_module_entry rdtscp_module_entry = {
     STANDARD_MODULE_HEADER,
     PHP_RDTSCP_EXTNAME,
-    rdtscp_php_functions,
+    rdtscp_functions,
     NULL,
     NULL,
     NULL,
@@ -25,7 +25,7 @@ zend_module_entry rdtscp_php_module_entry = {
     STANDARD_MODULE_PROPERTIES
 };
 
-ZEND_GET_MODULE(rdtscp_php)
+ZEND_GET_MODULE(rdtscp)
 
 ZEND_BEGIN_ARG_INFO_EX(rdtscp, 0, 0, 0)
 ZEND_END_ARG_INFO()
