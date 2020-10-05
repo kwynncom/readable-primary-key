@@ -1,11 +1,9 @@
 <?php
 
-require_once('analysis.php');
-
 function runAllCores() {
     
     $cn = 12; // number of cpus
-    $ni = 100000; // number of iterations
+    $ni = 10; // number of iterations
     
     $pid = 1; // any truthy value just because the logic will work that way
     
@@ -46,3 +44,5 @@ function runAllCores() {
 }
 
 runAllCores();
+
+// 12 cores X 600,000 = 7.2M passes and runs in a few seconds for run and check total
