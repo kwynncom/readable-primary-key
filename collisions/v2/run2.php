@@ -1,15 +1,17 @@
 <?php
 
+require_once('check2.php');
+
 function runAllCores() {
     
     $cn = 12; // number of cpus
-    $ni = 10; // number of iterations
+    $ni = 10000; // number of iterations
     
     $pid = 1; // any truthy value just because the logic will work that way
     
     $cpids = [];
     
-    $rf = '/tmp/rd/r1'; // consider using a RAM disk
+    $rf = tsc_collisions::rfname; // consider using a RAM disk
     if (file_exists($rf)) unlink($rf);
     
     for ($c=0; $c < $cn; $c++) {
