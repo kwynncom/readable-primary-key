@@ -4,7 +4,7 @@ require_once('/opt/kwynn/kwutils.php');
 
 class tsc_collisions {
     
-    const rfname = '/tmp/rd/r1';    
+    const rfname = '/tmp/rd/tscr';    
     
     public function __construct() {
 	$this->load();
@@ -47,6 +47,8 @@ class tsc_collisions {
 	    $cmma[$k]['max']  = number_format($cmma[$k]['max']);	    
 	    
 	}
+	
+	var_dump($cmma);
 	
 	return;
     }
