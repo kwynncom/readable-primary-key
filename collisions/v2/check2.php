@@ -42,14 +42,13 @@ class tsc_collisions {
 	foreach($cmma as $k => $av) {
 	    $cmma[$k]['min'] -= $mina;
 	    $cmma[$k]['max'] -= $mina;
-	    $cmma[$k]['dif']  = number_format($cmma[$cpun]['max'] - $cmma[$cpun]['min']);
+	    $cmma[$k]['dif']  = number_format($cmma[$k]['max'] - $cmma[$k]['min']);
 	    $cmma[$k]['min']  = number_format($cmma[$k]['min']);
 	    $cmma[$k]['max']  = number_format($cmma[$k]['max']);	    
 	    
 	}
 	
 	return;
-	
     }
     
     private function load() {
