@@ -1,11 +1,13 @@
 #include <php.h>  // for PHP's sake
 #include "php_nanopk.h"
 
-#include <time.h> // for C/C++, not PHP, for time
+#include <time.h> // for C/C++, not PHP, for time, for nanotime (clock_gettime())
 
 #include <inttypes.h> // for C/C++, not PHP, for tsc (rdtscp)
 #include <stdint.h>
 #include <x86intrin.h>
+
+#include <sys/sysinfo.h> // for C/C++ for uptime
 
 zend_function_entry nanopk_functions[] = {
     PHP_FE(nanopk, NULL)
@@ -43,6 +45,15 @@ long int c_loc_nanopk() {
     return epochns;
 }
 
+long int c_loc_sysinfo() {
+    struct sysinfo ssi;
+
+    int err = sysinfo(&ssi);
+    if (err != 0) return -1;
+
+    return ssi.uptime;    
+}
+
 PHP_FUNCTION(nanopk) {  
     
     uint64_t tick;
@@ -54,4 +65,5 @@ PHP_FUNCTION(nanopk) {
     add_index_long(return_value, 0, c_loc_nanopk());
     add_index_long(return_value, 1, tick); 
     add_index_long(return_value, 2, cpun);
+    add_index_long(return_value, 3, c_loc_sysinfo());
 }
