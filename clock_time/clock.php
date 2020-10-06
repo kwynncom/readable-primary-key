@@ -1,7 +1,9 @@
 <?php
 
+require_once('stddev.php');
+
 $esec =  3;
-$iter = 30;
+$iter = 100;
 $per  = $esec / $iter;
 $pow6 = pow(10,6);
 
@@ -11,6 +13,8 @@ for ($i=0; $i < $iter; $i++) {
     $a[] = $t;
     usleep($per * $pow6);
 }
+
+$sdo = new stddev();
 
 for ($i=0; $i < $iter; $i++) {
     $tick = $a[$i]['ta'][0];
@@ -28,8 +32,12 @@ for ($i=0; $i < $iter; $i++) {
     if (abs($eu - 0) > 0.0000001) {
 	$sl = $et / $eu;
 	$d  = intval(round($sl));
+	$sdo->put($d);
 	echo(number_format($d) . "\n");
     }
 }
+
+    
+var_dump($sdo->get());
 
 exit(0);
