@@ -1,5 +1,5 @@
-PHP_ARG_ENABLE(rdtscp, Whether to enable the rdtscpPHP extension, [ --enable-rdtscp Enable rdtscpPHP])
+PHP_ARG_ENABLE(nanopk, Whether to enable the nanopkPHP extension, [ --enable-nanopk Enable nanopkPHP])
 
-if test "$RDTSCP" != "no"; then
-    PHP_NEW_EXTENSION(rdtscp, rdtscp.c, $ext_shared)
+if test "$NANOPK" != "no"; then
+    PHP_NEW_EXTENSION(nanopk, nanopk.c, $ext_shared)
 fi

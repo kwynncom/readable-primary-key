@@ -1,7 +1,5 @@
 <?php
-/*
-$cmd = 'php -d extension=' . __DIR__ . '/' . 'rdtscp.so' . ' ' . __DIR__ . '/test.php' ;
+
+$cmd = 'php -d extension=' . '/tmp/ntime/modules/' . 'nanotime.so' . ' ' . __DIR__ . '/test2.php' ;
 echo $cmd . "\n";
 echo shell_exec($cmd);
- *
- */

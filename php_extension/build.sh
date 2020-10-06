@@ -1,11 +1,11 @@
 ODIR=`pwd`
-BDIR=/tmp/phprd
+BDIR=/tmp/npk
 if [ ! -d $BDIR ]; then
     mkdir $BDIR
 fi
 cp * $BDIR
 cd $BDIR
 phpize
-./configure --enable-rdtscp
+./configure --enable-nanopk
 make
-php -d extension=$BDIR/modules/rdtscp.so $ODIR/test.php
+php -d extension=$BDIR/modules/nanopk.so $ODIR/test.php
