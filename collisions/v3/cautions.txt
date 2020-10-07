@@ -1,4 +1,4 @@
-I ran 48M rows by running the run-only script version twice and then 
+I ran 48M rows by running the run-only script version twice, without deleting the files, and then 
 running the check script.  
 
 When I tried to run 96M rows with the combined run-check, bad things happened to my 
