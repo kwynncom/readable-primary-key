@@ -1,0 +1,5 @@
+I ran 48M rows by running the run-only script version twice and then 
+running the check script.  
+
+When I tried to run 96M rows with the combined run-check, bad things happened to my 
+boot session--lots of stuff crashed.  I should probably consider doing some math next time.
