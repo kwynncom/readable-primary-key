@@ -1,16 +1,19 @@
 <?php
 
-require_once('../v2/check2.php');
+require_once('ck3.php');
 
 function runAllCores() {
     
     $cn = 12; // number of cpus
-    $ni = 200000; // number of iterations
+    $ni = pow(10,1); // number of iterations
+    $rfp = coll_ck3::rfname;
+    
+    $fa = glob($rfp . '*');
+    foreach($fa as $f) unlink($f);
     
     $pid = 1; // any truthy value just because the logic will work that way
     
     $cpids = [];
-
     
     for ($c=0; $c < $cn; $c++) {
 	
@@ -24,8 +27,8 @@ function runAllCores() {
 
 	for ($i=0; $i <  $ni; $i++) $a[] = rdtscp();
 
-	$rf = tsc_collisions::rfname . '_' . getmypid();
-	$fh = fopen($rf,'w');
+	$b = hrtime(1);
+	$rf = $rfp . '_' . getmypid();
 	
 	$t = '';
 	for ($i=0; $i <  $ni; $i++) {
@@ -34,13 +37,17 @@ function runAllCores() {
 	    $t .= sprintf('%015d-%02d' . "\n", $tick, $cpun);
 	}
 	
-	fwrite($fh, $t);
+	file_put_contents($rf, $t);
+	$e = hrtime(1);
+	
+	echo 'write time: ' . number_format($e - $b) . "\n";
+
 	
 	if ($pid === 0) exit(0);
     }
     
     for($i=0; $i < $cn; $i++) pcntl_waitpid($cpids[$i], $status);
-
 }
 
 runAllCores();
+new coll_ck3();

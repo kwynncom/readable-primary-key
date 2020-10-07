@@ -1,0 +1,4 @@
+"/usr/bin/php" ".../collisions/v3/ck3.php"
+count = 48,000,000
+OK - no collisions
+Done.
