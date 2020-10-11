@@ -1,14 +1,15 @@
 <?php
 
+require_once('/opt/kwynn/kwutils.php');
 require_once('stddev.php');
 
-$esec =  3;
+$esec =  1;
 $iter = 100;
 $per  = $esec / $iter;
 $pow6 = pow(10,6);
 
 for ($i=0; $i < $iter; $i++) {
-    $t['us'] = microtime();
+    $t['ns'] = nanotime();
     $t['ta'] = rdtscp();
     $a[] = $t;
     usleep($per * $pow6);
@@ -18,22 +19,19 @@ $sdo = new stddev();
 
 for ($i=0; $i < $iter; $i++) {
     $tick = $a[$i]['ta'][0];
-    $ua = explode(" ", $a[$i]['us']);
-    $ts = intval($ua[1]);
-    $ur  = floatval($ua[0]);
+    $nr   = $a[$i]['ns'];
     if ($i === 0) {
 	$mint = $tick;
-	$mini = $ts;
-	$minu = $ur;
+	$minu = $nr;
     }
-    $eu = ($ts - $mini) + ($ur - $minu);
+    $eu = $nr   - $minu;
     $et = $tick - $mint;
    
     if (abs($eu - 0) > 0.0000001) {
 	$sl = $et / $eu;
-	$d  = intval(round($sl));
+	$d  = $sl;
 	$sdo->put($d);
-	echo(number_format($d) . "\n");
+	echo($d . "\n");
     }
 }
 
