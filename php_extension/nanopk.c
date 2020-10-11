@@ -39,8 +39,8 @@ void c_local_rdtscp(uint64_t *tick,  uint64_t *cpuna) {
 
 long int c_local_nanopk(long int *U, long int *nso, long int *Uns) {
     struct timespec sts;
-    int ret = clock_gettime(CLOCK_REALTIME, &sts);
-    if (ret != 0) return 0;
+    int sret = clock_gettime(CLOCK_REALTIME, &sts);
+    if (sret != 0) return -1;
     *U    = sts.tv_sec;
     *nso  = sts.tv_nsec;
     *Uns  = sts.tv_sec * 1000000000 + sts.tv_nsec;
@@ -49,20 +49,21 @@ long int c_local_nanopk(long int *U, long int *nso, long int *Uns) {
 long int c_local_uptime() {
     struct sysinfo ssi;
 
-    int err = sysinfo(&ssi);
-    if (err != 0) return -1;
+    int sret = sysinfo(&ssi);
+    if (sret != 0) return -1;
 
     return ssi.uptime;    
 }
 
 PHP_FUNCTION(nanopk) {  
     
-    uint64_t tick;
-    uint64_t cpun;
-    long int U;
-    long int Unsonly;
-    long int Uns;
+    uint64_t tick = -1;
+    uint64_t cpun = -1;
+    long int U    = -1;
+    long int Unsonly = -1;
+    long int Uns = -1;
     long int uptime = c_local_uptime();
+    long int Uboot = -1;
     
     c_local_rdtscp(&tick, &cpun);
     c_local_nanopk(&U, &Unsonly, &Uns);
@@ -74,5 +75,9 @@ PHP_FUNCTION(nanopk) {
     add_assoc_long(return_value, "Uns", Uns);
     add_assoc_long(return_value, "Unsonly", Unsonly);
     add_assoc_long(return_value, "uptime", uptime);
-    add_assoc_long(return_value, "Uboot", U - uptime);    
+    add_assoc_string(return_value, "v", PHP_NANOPK_VERSION);
+
+    if (uptime > -1) Uboot = U - uptime;
+
+    add_assoc_long(return_value, "Uboot", Uboot);    
 }
