@@ -31,21 +31,22 @@ ZEND_GET_MODULE(nanopk)
 ZEND_BEGIN_ARG_INFO_EX(nanopk, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-void c_loc_rdtscp(uint64_t *tick,  uint64_t *cpuna) {
+void c_local_rdtscp(uint64_t *tick,  uint64_t *cpuna) {
     uint32_t cpun;
     *tick  = (uint64_t)__rdtscp(&cpun);
     *cpuna = cpun;
 } 
 
-long int c_loc_nanopk() {
+long int c_local_nanopk(long int *U, long int *nso, long int *Uns) {
     struct timespec sts;
     int ret = clock_gettime(CLOCK_REALTIME, &sts);
     if (ret != 0) return 0;
-    long int epochns = sts.tv_sec * 1000000000 + sts.tv_nsec;
-    return epochns;
+    *U    = sts.tv_sec;
+    *nso  = sts.tv_nsec;
+    *Uns  = sts.tv_sec * 1000000000 + sts.tv_nsec;
 }
 
-long int c_loc_sysinfo() {
+long int c_local_uptime() {
     struct sysinfo ssi;
 
     int err = sysinfo(&ssi);
@@ -58,12 +59,20 @@ PHP_FUNCTION(nanopk) {
     
     uint64_t tick;
     uint64_t cpun;
+    long int U;
+    long int Unsonly;
+    long int Uns;
+    long int uptime = c_local_uptime();
     
     c_local_rdtscp(&tick, &cpun);
+    c_local_nanopk(&U, &Unsonly, &Uns);
 
     array_init    (return_value);
-    add_index_long(return_value, 0, c_loc_nanopk());
-    add_index_long(return_value, 1, tick); 
-    add_index_long(return_value, 2, cpun);
-    add_index_long(return_value, 3, c_loc_sysinfo());
+    add_assoc_long(return_value, "U"    , U);
+    add_assoc_long(return_value, "tick" , tick); 
+    add_assoc_long(return_value, "coren", cpun);
+    add_assoc_long(return_value, "Uns", Uns);
+    add_assoc_long(return_value, "Unsonly", Unsonly);
+    add_assoc_long(return_value, "uptime", uptime);
+    add_assoc_long(return_value, "Uboot", U - uptime);    
 }
