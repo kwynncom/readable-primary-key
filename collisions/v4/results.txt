@@ -1,0 +1,10 @@
+This time comparing nanotime-corenumber as unique
+
+count = 12,000,000
+OK - no collisions
+
+This does not seem safe in that one should not count on no collisions.  I was just curious.
+
+When I tried for 24M, my machine became unhappy.
+
+Nanotime only collides with 1.2M, which is expected.
