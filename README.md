@@ -1,6 +1,8 @@
 # readable-primary-key
 Create human-readable primary keys for MongoDB
 
+2020/11/16 update - see timing/tsc_v_oid_v_mutex.php and timing/README.md
+
 My original idea is further below, but this may be coming to a dead end.  
 
 It takes roughly 1,200ns to run "new MongoDB\BSON\ObjectId();"  Or, more precisely, it takes that on average when you run it 1,000 times (see ooid.php).

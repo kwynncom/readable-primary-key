@@ -5,7 +5,7 @@ require_once('ck3.php');
 function runAllCores() {
     
     $cn = 12; // number of cpus
-    $ni = pow(10,6) * 1; // number of iterations
+    $ni = pow(10,5) * 1; // number of iterations
     $rfp = coll_ck3::rfname;
     
     $fa = glob($rfp . '*');
