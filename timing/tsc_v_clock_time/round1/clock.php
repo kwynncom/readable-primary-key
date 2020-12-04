@@ -4,13 +4,14 @@ require_once('/opt/kwynn/kwutils.php');
 require_once('stddev.php');
 
 $esec =  1;
-$iter = 100;
+$iter = 20;
 $per  = $esec / $iter;
 $pow6 = pow(10,6);
 
 for ($i=0; $i < $iter; $i++) {
     $t['ns'] = nanotime();
     $t['ta'] = rdtscp();
+    usleep(900);
     $a[] = $t;
     usleep($per * $pow6);
 }
