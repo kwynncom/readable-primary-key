@@ -6,7 +6,7 @@ I wanted to see how long it would take to do a sequence the "naive" way using sh
 A few notes:
 
 64 bytes is too low for the shared memory segment, or, at least, it is under some circumstances.  If it's too low, you'll get a 
-warning message and the result of shm_put_var will be false.  96 bytes works.  10,000 bytes also work.
+warning message and the result of shm_put_var will be false.  96 bytes works.  10,000 bytes also works.
 
 ftok() is a fun little function to generate a unique shared memory ID, but I found that 1 works, too.
 

@@ -1,0 +1,17 @@
+2020/12/17 2:30pm EST / GMT -5
+
+version 0.0.7 was minor and "internal" (not saved to GitHub) - functionally same as 0.0.6
+creating version 0.0.6
+removing boot info from nanopk and creating uptime()
+
+***********
+Reminders / notes to self / installation notes.
+
+I can't test directly from this directory because the previous version is already installed.  
+build.sh creates the temporary build in /tmp/npk
+Go to that directory and make again if needed and the sudo make install
+Then run test.php
+Need to restart Apache to test web version
+
+My 2017 random web app is the only app on my web site that uses this so far.  It works 
+seamlessly with 0.0.7

@@ -14,8 +14,8 @@ zend_function_entry nanopk_functions[] = {
     PHP_FE(nanotime, NULL)
     PHP_FE(rdtscp, NULL)
     PHP_FE(rdtscp_assoc, NULL)
+    PHP_FE(uptime, NULL)
     PHP_FE_END
-
 };
 
 zend_module_entry nanopk_module_entry = {
@@ -93,6 +93,23 @@ long int c_local_uptime() {
     return ssi.uptime;    
 }
 
+PHP_FUNCTION(uptime) {
+    
+    long int uptime = c_local_uptime();
+
+    struct timespec sts;
+    int sret = clock_gettime(CLOCK_REALTIME, &sts);
+    long int Uboot = -1;
+    long int U     = -1;
+
+    if (sret == 0) U = sts.tv_sec;
+    if (U > -1 && uptime > -1) Uboot = U - uptime;
+
+    array_init    (return_value);
+    add_assoc_long(return_value, "uptime", uptime);
+    add_assoc_long(return_value, "Uboot", Uboot);   
+}
+
 PHP_FUNCTION(nanopk) {  
     
     uint64_t tick = -1;
@@ -100,22 +117,15 @@ PHP_FUNCTION(nanopk) {
     long int U    = -1;
     long int Unsonly = -1;
     long int Uns = -1;
-    long int uptime = c_local_uptime();
-    long int Uboot = -1;
-    
+
     c_local_rdtscp(&tick, &cpun);
     c_local_nanopk(&U, &Unsonly, &Uns);
 
     array_init    (return_value);
-    add_assoc_long(return_value, "U"    , U);
     add_assoc_long(return_value, "tick" , tick); 
     add_assoc_long(return_value, "coren", cpun);
+    add_assoc_long(return_value, "U"    , U);
     add_assoc_long(return_value, "Uns", Uns);
     add_assoc_long(return_value, "Unsonly", Unsonly);
-    add_assoc_long(return_value, "uptime", uptime);
-    add_assoc_string(return_value, "v", PHP_NANOPK_VERSION);
-
-    if (uptime > -1) Uboot = U - uptime;
-
-    add_assoc_long(return_value, "Uboot", Uboot);    
+    add_assoc_string(return_value, "nanopk_v", PHP_NANOPK_VERSION);
 }
