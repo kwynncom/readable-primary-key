@@ -125,8 +125,13 @@ PHP_FUNCTION(nanopk) {
     struct timespec sts;
     bool extraU = (arg & (NANOPK_U & NANOPK_UNSOI & NANOPK_UNSOF)) == 0;
 
+    const long billion = 1000000000;
+
     if (!extraU && ((arg & NANOPK_UNS)     )) uns = c_nanotime_only();
-    if ( extraU && ((arg & NANOPK_UNS) == 0)) sts = c_get_timespec ();
+    if ( extraU) {
+        sts = c_get_timespec ();
+        if (uns == -1) uns = sts.tv_sec * billion + sts.tv_nsec;
+    }
 
     if (arg & NANOPK_UNS) add_assoc_long(return_value, "Uns", uns);
     
@@ -135,7 +140,7 @@ PHP_FUNCTION(nanopk) {
     double   unsof = -1;
 
 //                      123456789
-    const long billion = 1000000000;
+
 
     if (arg & NANOPK_U)       add_assoc_long  (return_value, "U"    , sts.tv_sec);
     if (arg & NANOPK_UNSOI)   add_assoc_long  (return_value, "Unsoi", sts.tv_nsec);
