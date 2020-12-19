@@ -1,6 +1,90 @@
 # readable-primary-key
 Create human-readable primary keys for MongoDB
 
+2020/12/19 restatement of the project
+
+The main result of this project is the opposite of human-readable keys.  One day I will move code to another project.
+
+The main result is in my /php_extension folder.
+
+The extension gives one tools to create primary keys with many cores / threads without mutual exclusion / semaphores.  
+
+I created a PHP function rdtscp that gives PHP access to the rdtscp x86 / x64 instruction--the time stamp counter (TSC) plus 
+the processor ID (PID).  The TSC is the basic clock tick such as 1.33 GHz.  The processor ID is which processor / core / thread the 
+function read.  The rdtscp instruction takes 32 cycles (tics) to run (based on my experiments in the project), so the TSC and the PID 
+give one a unique key for a given boot session.  Upon reboot, the clock starts over.
+
+The nanopk() function by default gives TSC, PID, and "wall clock" time down to the nanosecond, as an associative array.  Thus, those 3 fields are unique 
+to that machine (because the "wall clock" is much more precise than a boot session).
+
+nanopk(fields) will optionally give or exclude those fields and others based on the NANOPK_ constants I define.  Use the constants as a bitmask.
+
+The fields one can get are:
+
+
+21507323850116      - NANOPK_TSC - timestamp counter (number of ticks since boot)
+11                  - NANOPK_PID - The processor / core / thread that the ticks came from 
+1608420495          - NANOPK_U   (Unix epoch in seconds)
+1608420495816608010 - NANOPK_UNS (Unix epoch in nanoseconds)
+          816608010 - NANOPK_UNSOI - Only the nanoseconds, as an integer, as opposed to the seconds
+        0.81660801  - NANOPK_UNSOF - Only the nanoseconds as a float
+0.0.10              - NANOPK_VERSION - version of the extension
+
+Or:
+
+array(7) {
+  ["tsc"]=>
+  int(21507323850116)
+  ["pid"]=>
+  int(8)
+  ["Uns"]=>
+  int(1608420495816608010)
+  ["U"]=>
+  int(1608420495)
+  ["Unsoi"]=>
+  int(816608010)
+  ["Unsof"]=>
+  float(0.81660801)
+  ["nanopk_v"]=>
+  string(5) "0.0.9"
+}
+
+nanotime() gives only UNS or Unix nanoseconds, such as 1608420495816608010
+
+uptime() is very similar to the Linux command of the same name.  It returns:
+
+array(4) {
+  ["uptime"]=>
+  int(60398)
+  ["Ubest"]=>
+  int(1608360097)
+  ["Ubmin"]=>
+  int(1608360094)
+  ["Ubmax"]=>
+  int(1608360100)
+}
+
+uptime is seconds since boot.  This is the direct / only result of the underlying C function.  
+Ubest is Unix timestamp (epoch) boot time estimate.  It's an estimate because the precision is only down to the second.  If you call this or 
+run $ uptime -s   You will get slighly different results.
+
+Thus Ubmin and Ubmax are the estimate plus or minus 3.  It seems that one could never be more than 3 off. (I'm not sure you can be 2 off, but it seems 
+somewhat possible.)
+
+I included uptime in case one wanted to use this to define which boot session.  I'm now close to done with a boot service to do this more systematically.  
+For a specific version of this, see:
+
+https://github.com/kwynncom/code-fragments/commit/046cd1e28115ff538af8e1e4b84d24be305bf412
+
+Similarly, machine ID is a service to very specifically identify the machine:
+
+https://github.com/kwynncom/code-fragments/commit/41c736063de0a0a1b285ae6ff786dd3ba54ee9d9
+
+I am giving specific commits because I will move that code eventually.
+
+
+*********************
+****************
 2020/11/16 update - see timing/tsc_v_oid_v_mutex.php and timing/README.md
 
 My original idea is further below, but this may be coming to a dead end.  
