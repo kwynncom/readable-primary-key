@@ -6,6 +6,6 @@ fi
 cp * $BDIR
 cd $BDIR
 phpize
-./configure --enable-nanopk
+# ./configure --enable-nanopk
 make
 php -d extension=$BDIR/modules/nanopk.so $ODIR/test.php
