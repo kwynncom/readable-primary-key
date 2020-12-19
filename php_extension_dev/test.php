@@ -1,6 +1,6 @@
 <?php
 
-var_dump(nanotimedev(0));
+var_dump(nanotimedev(NANOPK_U | NANOPK_UNS));
 
 /*
 
