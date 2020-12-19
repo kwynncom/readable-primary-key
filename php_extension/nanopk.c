@@ -61,7 +61,7 @@ PHP_FUNCTION(rdtscp) {
     add_assoc_long(return_value, "coren", pid);
 }
 
-long int c_uptime() {
+long c_uptime() {
     struct sysinfo ssi;
     int sret = sysinfo(&ssi);
     if (sret != 0) return -1;
@@ -70,14 +70,14 @@ long int c_uptime() {
 
 PHP_FUNCTION(uptime) {
     
-    long int uptime = c_uptime();
+    long uptime = c_uptime();
 
     struct timespec sts;
     int sret = clock_gettime(CLOCK_REALTIME, &sts);
-    long int Uboot = -1;
-    long int U     = -1;
-    long int Ubmin = -1;
-    long int Ubmax = -1; 
+    long Uboot = -1;
+    long U     = -1;
+    long Ubmin = -1;
+    long Ubmax = -1; 
 
     if (sret == 0) U = sts.tv_sec;
     if (U > -1 && uptime > -1) Uboot = U - uptime;
@@ -95,14 +95,14 @@ struct timespec c_get_timespec() {
     return sts;
 }
 
-long int c_nanotime_only() {
+long c_nanotime_only() {
     struct timespec sts = c_get_timespec();
-    long int Uns = sts.tv_sec * 1000000000 + sts.tv_nsec;
+    long Uns = sts.tv_sec * 1000000000 + sts.tv_nsec;
     return Uns;
 }
 
 PHP_FUNCTION(nanotime) { 
-    long int ns = c_nanotime_only();
+    long ns = c_nanotime_only();
     RETURN_LONG(ns); 
 }
 
@@ -121,38 +121,27 @@ PHP_FUNCTION(nanopk) {
     if (arg &  NANOPK_TSC)   add_assoc_long(return_value, "tsc", tick); 
     if (arg &  NANOPK_PID)   add_assoc_long(return_value, "pid", pid);
     
-    long int uns = -1;
+    const bool extraU = (arg & (NANOPK_U & NANOPK_UNSOI & NANOPK_UNSOF)) == 0;
+    const arguns = arg & NANOPK_UNS;
+
+    long uns = -1;
+    if (!extraU && arguns) uns = c_nanotime_only();
+
+    const long billion = 1000000000; 
     struct timespec sts;
-    bool extraU = (arg & (NANOPK_U & NANOPK_UNSOI & NANOPK_UNSOF)) == 0;
-
-    const long billion = 1000000000;
-
-    if (!extraU && ((arg & NANOPK_UNS)     )) uns = c_nanotime_only();
     if ( extraU) {
         sts = c_get_timespec ();
-        if (uns == -1) uns = sts.tv_sec * billion + sts.tv_nsec;
+        if (arguns) uns = sts.tv_sec * billion + sts.tv_nsec;
     }
 
     if (arg & NANOPK_UNS) add_assoc_long(return_value, "Uns", uns);
     
-    long int U     = -1;
-    long int unsoi = -1;
-    double   unsof = -1;
-
-//                      123456789
-
+    long   U     = -1;
+    long   unsoi = -1;
+    double unsof = -1;
 
     if (arg & NANOPK_U)       add_assoc_long  (return_value, "U"    , sts.tv_sec);
     if (arg & NANOPK_UNSOI)   add_assoc_long  (return_value, "Unsoi", sts.tv_nsec);
     if (arg & NANOPK_UNSOF)   add_assoc_double(return_value, "Unsof", (double) sts.tv_nsec / billion);
     if (arg & NANOPK_VERSION) add_assoc_string(return_value, "nanopk_v", PHP_NANOPK_VERSION);
-
-/*
-    array_init    (return_value);
-    add_assoc_long(return_value, "tick" , tick); 
-    add_assoc_long(return_value, "coren", pid);
-    add_assoc_long(return_value, "U"    , U);
-    add_assoc_long(return_value, "Uns", Uns);
-    add_assoc_long(return_value, "Unsonly", Unsonly);
-    add_assoc_string(return_value, "nanopk_v", PHP_NANOPK_VERSION); */
 }
