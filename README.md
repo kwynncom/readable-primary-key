@@ -5,7 +5,9 @@ Create human-readable primary keys for MongoDB
 
 The main result of this project is the opposite of human-readable keys.  One day I will move code to another project.
 
-The main result is in my /php_extension folder.
+The human-readable part did happen eventually.  I mention it further below.
+
+The main result of what this became is in my /php_extension folder.
 
 The extension gives one tools to create primary keys with many cores / threads without mutual exclusion / semaphores.  
 
@@ -82,6 +84,17 @@ https://github.com/kwynncom/code-fragments/commit/41c736063de0a0a1b285ae6ff786dd
 
 I am giving specific commits because I will move that code eventually.
 
+*******
+**********
+Human-readable
+
+The human-readable keys finally happend in my "mongodb2" file:
+
+https://github.com/kwynncom/kwynn-php-general-utils/blob/92ce6f735d12403e47ebc54936dbcea914571e49/mongodb2.php
+
+The MongoDB _id looks like this: 0-12-17-00:17:44-13-2020
+
+I'll write up the (at least some) details in that project's README.
 
 *********************
 ****************
