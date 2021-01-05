@@ -94,6 +94,7 @@ PHP_FUNCTION(nanopkavg) {
     add_assoc_long(return_value, "Unsbef", nsbef);   
     add_assoc_long(return_value, "Unsavg", nsavg);
     add_assoc_long(return_value, "Unsaft", nsaft);
+    add_assoc_long(return_value, "Unsdif", nsaft - nsbef);
 }
 
 long c_uptime() {
