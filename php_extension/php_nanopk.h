@@ -1,11 +1,11 @@
 #define PHP_NANOPK_EXTNAME "nanopk"
-#define PHP_NANOPK_VERSION "0.0.12"
+#define PHP_NANOPK_VERSION "0.0.13"
 
 PHP_FUNCTION(nanopk);
+PHP_FUNCTION(nanopkavg);
 PHP_FUNCTION(nanotime);
 PHP_FUNCTION(rdtscp);
 PHP_FUNCTION(uptime);
-PHP_FUNCTION(nanopkavg);
 
 #define NANOPK_UNS      1
 #define NANOPK_TSC      2

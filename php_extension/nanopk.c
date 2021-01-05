@@ -92,7 +92,7 @@ PHP_FUNCTION(nanopkavg) {
     add_assoc_long(return_value, "tsc" , tick); 
     add_assoc_long(return_value, "pid", pid);   
     add_assoc_long(return_value, "Unsbef", nsbef);   
-    add_assoc_long(return_value, "Unsavg", nsavg);
+    add_assoc_long(return_value, "Uns", nsavg);
     add_assoc_long(return_value, "Unsaft", nsaft);
     add_assoc_long(return_value, "Unsdif", nsaft - nsbef);
 }
