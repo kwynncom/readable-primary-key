@@ -8,10 +8,11 @@
 #include <stdbool.h>
 
 zend_function_entry nanopk_functions[] = {
-    PHP_FE(nanopk, NULL)
-    PHP_FE(nanotime, NULL)
-    PHP_FE(rdtscp, NULL)
-    PHP_FE(uptime, NULL)
+    PHP_FE(nanopk   , NULL)
+    PHP_FE(nanopkavg, NULL)
+    PHP_FE(nanotime , NULL)
+    PHP_FE(rdtscp   , NULL)
+    PHP_FE(uptime   , NULL)
     PHP_FE_END
 };
 
@@ -57,8 +58,42 @@ PHP_FUNCTION(rdtscp) {
     c_rdtscp(&tick, &pid);
 
     array_init    (return_value); 
-    add_assoc_long(return_value, "tick" , tick); 
-    add_assoc_long(return_value, "coren", pid);
+    add_assoc_long(return_value, "tsc" , tick); 
+    add_assoc_long(return_value, "pid", pid);
+}
+
+struct timespec c_get_timespec() {
+    struct timespec sts;
+    clock_gettime(CLOCK_REALTIME, &sts); // not sure if need to do anything with int ret / return value
+    return sts;
+}
+
+
+long c_nanotime_only() {
+    struct timespec sts = c_get_timespec();
+    long Uns = sts.tv_sec * 1000000000 + sts.tv_nsec;
+    return Uns;
+}
+
+PHP_FUNCTION(nanopkavg) {
+    uint64_t tick;
+    uint64_t pid;
+    long nsbef;
+    long nsaft;
+    long nsavg;
+
+    nsbef = c_nanotime_only();
+    c_rdtscp(&tick, &pid);   
+    nsaft = c_nanotime_only();
+
+    nsavg = (nsbef + nsaft) >> 1;
+ 
+    array_init    (return_value); 
+    add_assoc_long(return_value, "tsc" , tick); 
+    add_assoc_long(return_value, "pid", pid);   
+    add_assoc_long(return_value, "Unsbef", nsbef);   
+    add_assoc_long(return_value, "Unsavg", nsavg);
+    add_assoc_long(return_value, "Unsaft", nsaft);
 }
 
 long c_uptime() {
@@ -89,17 +124,6 @@ PHP_FUNCTION(uptime) {
     add_assoc_long(return_value, "Ubmax" , Uboot + 3);
 }
 
-struct timespec c_get_timespec() {
-    struct timespec sts;
-    clock_gettime(CLOCK_REALTIME, &sts); // not sure if need to do anything with int ret / return value
-    return sts;
-}
-
-long c_nanotime_only() {
-    struct timespec sts = c_get_timespec();
-    long Uns = sts.tv_sec * 1000000000 + sts.tv_nsec;
-    return Uns;
-}
 
 PHP_FUNCTION(nanotime) { 
     long ns = c_nanotime_only();
@@ -122,7 +146,7 @@ PHP_FUNCTION(nanopk) {
     if (arg &  NANOPK_PID)   add_assoc_long(return_value, "pid", pid);
     
     const bool extraU = (arg & (NANOPK_U & NANOPK_UNSOI & NANOPK_UNSOF)) == 0;
-    const arguns = arg & NANOPK_UNS;
+    const long arguns = arg & NANOPK_UNS;
 
     long uns = -1;
     if (!extraU && arguns) uns = c_nanotime_only();

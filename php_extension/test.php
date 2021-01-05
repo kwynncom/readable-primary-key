@@ -1,8 +1,10 @@
 <?php
 
-$fs = ['time', 'nanotime', 'nanopk', 'uptime', 'rdtscp'];
+$fs = ['time', 'nanotime', 'nanopk', 'uptime', 'rdtscp', 'nanopkavg'];
 foreach($fs as $f) var_dump($f());
+var_dump(nanopk(NANOPK_VERSION));
 
+if (0) {
 $args = [
     0,
     NANOPK_U,
@@ -12,3 +14,4 @@ $args = [
     ];
 
 foreach($args as $a) var_dump(nanopk($a));
+}
