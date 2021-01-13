@@ -1,5 +1,9 @@
 <?php
 
+$name = 'nanopk';
+echo($name . ' version: ' . phpversion($name) . "\n");
+
+
 $fs = ['time', 'nanotime', 'nanopk', 'uptime', 'rdtscp', 'nanopkavg', 'nanotime_array'];
 foreach($fs as $f) var_dump($f());
 var_dump(nanopk(NANOPK_VERSION));
