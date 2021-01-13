@@ -7,10 +7,11 @@ for ($i = 0; $i < $its; $i++) {
     // new MongoDB\BSON\ObjectId();
    // rdtscp_assoc();
    // $j++;
-   // rdtscp();
+ // rdtscp();
   // $r = rdtscp();   $s = $r[0] . '-' . $r[1] . '-boot1-mid1';
     // nanotime();
-  //  nanopk();
+  // nanopk();
+  // nanopkavg();
     // time();
 }
 $e = nanotime();

@@ -1,6 +1,6 @@
 <?php
 
-$fs = ['time', 'nanotime', 'nanopk', 'uptime', 'rdtscp', 'nanopkavg'];
+$fs = ['time', 'nanotime', 'nanopk', 'uptime', 'rdtscp', 'nanopkavg', 'nanotime_array'];
 foreach($fs as $f) var_dump($f());
 var_dump(nanopk(NANOPK_VERSION));
 

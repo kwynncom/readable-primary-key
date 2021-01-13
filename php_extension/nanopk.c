@@ -8,11 +8,12 @@
 #include <stdbool.h>
 
 zend_function_entry nanopk_functions[] = {
-    PHP_FE(nanopk   , NULL)
-    PHP_FE(nanopkavg, NULL)
-    PHP_FE(nanotime , NULL)
-    PHP_FE(rdtscp   , NULL)
-    PHP_FE(uptime   , NULL)
+    PHP_FE(nanopk        , NULL)
+    PHP_FE(nanopkavg     , NULL)
+    PHP_FE(nanotime      , NULL)
+    PHP_FE(nanotime_array, NULL)
+    PHP_FE(rdtscp        , NULL)
+    PHP_FE(uptime        , NULL)
     PHP_FE_END
 };
 
@@ -66,6 +67,13 @@ struct timespec c_get_timespec() {
     struct timespec sts;
     clock_gettime(CLOCK_REALTIME, &sts); // not sure if need to do anything with int ret / return value
     return sts;
+}
+
+PHP_FUNCTION(nanotime_array) {
+    struct timespec sts = c_get_timespec();
+    array_init    (return_value); 
+    add_assoc_long(return_value, "s"  , (long)sts.tv_sec );    
+    add_assoc_long(return_value, "ns" ,       sts.tv_nsec);   
 }
 
 
