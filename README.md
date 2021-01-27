@@ -1,5 +1,24 @@
-# readable-primary-key
-Create human-readable primary keys for MongoDB
+This repo should go dormant.  It became a mess.  I have moved stuff:
+
+https://github.com/kwynncom/nano-php-extension
+
+That is the new home of the extension, as of 2021/01/26
+
+***************
+I think I mentioned it elsewhere, but the original intent of this repository is starting to get off the ground.  
+I have started creating keys (_id) like this: 1-01-22-23:44:59-2343-2021
+
+Where 1- is the short form of 2021 and I append 2021 lest I have problems in 10 years.  01-22 is month and day, then 
+timestamp, then a sequence.  Even if I re-write the sequence table one second after the last ID is created, I'm fine because 
+the sequence will be reused during a later second.  
+
+These IDs are being created from
+
+https://github.com/kwynncom/kwynn-php-general-utils/blob/6eecc847951fdd5aea5c9907b85dc7cfa0f69c7b/mongodb2.php
+
+Specifically, I tend to use the 'idoas' option - ID only as string.
+
+********
 
 2020/12/19 restatement of the project
 
